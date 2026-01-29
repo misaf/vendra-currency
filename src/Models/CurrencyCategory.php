@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Misaf\VendraCurrency\Models;
 
-use Misaf\VendraCurrency\ThumbnailTableRecord;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
+use Misaf\Tenant\Traits\BelongsToTenant;
 use Misaf\VendraCurrency\Database\Factories\CurrencyCategoryFactory;
 use Misaf\VendraCurrency\Observers\CurrencyCategoryObserver;
+use Misaf\VendraCurrency\ThumbnailTableRecord;
 use Misaf\VendraCurrency\Traits\HasCurrency as HasCurrencyTrait;
-use Misaf\Tenant\Traits\BelongsToTenant;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia;

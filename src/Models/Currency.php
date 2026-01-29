@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Misaf\VendraCurrency\Models;
 
-use Misaf\VendraCurrency\Traits\ThumbnailTableRecord;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
-use Misaf\VendraCurrency\Database\Factories\CurrencyFactory;
 use Misaf\Tenant\Traits\BelongsToTenant;
+use Misaf\VendraCurrency\Database\Factories\CurrencyFactory;
+use Misaf\VendraCurrency\Traits\ThumbnailTableRecord;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\EloquentSortable\Sortable;

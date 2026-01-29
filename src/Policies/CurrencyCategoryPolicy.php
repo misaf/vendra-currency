@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Misaf\VendraCurrency\Policies;
 
 use Illuminate\Auth\Access\HandlesAuthorization;
-use Misaf\VendraCurrency\Models\CurrencyCategory;
 use Misaf\User\Models\User;
+use Misaf\VendraCurrency\Models\CurrencyCategory;
 
 final class CurrencyCategoryPolicy
 {

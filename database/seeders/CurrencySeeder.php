@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Misaf\VendraCurrency\Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Misaf\Tenant\Models\Tenant;
 use Misaf\VendraCurrency\Models\Currency;
 use Misaf\VendraCurrency\Models\CurrencyCategory;
-use Misaf\Tenant\Models\Tenant;
 
 final class CurrencySeeder extends Seeder
 {
