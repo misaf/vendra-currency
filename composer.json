@@ -1,9 +1,10 @@
 {
+    "$schema": "https://getcomposer.org/schema.json",
     "name": "misaf/vendra-currency",
     "description": "Multi-currency support system with translatable content and hierarchical currency categories",
     "type": "vendra-module",
     "license": "MIT",
-    "version": "12.0.2",
+    "version": "12.0.4",
     "keywords": [
         "laravel",
         "filamentphp",
@@ -40,8 +41,6 @@
             "Misaf\\VendraCurrency\\Database\\Seeders\\": "database/seeders/"
         }
     },
-    "minimum-stability": "stable",
-    "prefer-stable": true,
     "extra": {
         "laravel": {
             "providers": [
@@ -50,8 +49,14 @@
         }
     },
     "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
         "allow-plugins": {
-            "pestphp/pest-plugin": true
+            "pestphp/pest-plugin": true,
+            "php-http/discovery": true
         }
-    }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
 }
