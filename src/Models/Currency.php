@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraCurrency\Models;
 
-use App\Traits\ThumbnailTableRecord;
+use Misaf\VendraCurrency\Traits\ThumbnailTableRecord;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
