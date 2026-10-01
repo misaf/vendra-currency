@@ -1,0 +1,112 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Misaf\VendraCurrency\Support;
+
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Misaf\VendraSupport\Capabilities\IntegrationExceptions;
+use Misaf\VendraSupport\Capabilities\NullCurrencyResolver;
+use Misaf\VendraSupport\Contracts\CurrencyResolver;
+use Misaf\VendraSupport\Tenancy\TenantAwareness;
+use Throwable;
+
+final readonly class EloquentCurrencyResolver implements CurrencyResolver
+{
+    /**
+     * @param  class-string<Model>  $currencyModel
+     */
+    public function __construct(
+        private string $currencyModel,
+        private CurrencyResolver $fallback = new NullCurrencyResolver,
+        private string $codeColumn = 'code',
+        private string $nameColumn = 'name',
+        private string $activeColumn = 'active',
+        private string $defaultColumn = 'is_default',
+        private string $positionColumn = 'position',
+    ) {}
+
+    public function available(): bool
+    {
+        return true;
+    }
+
+    public function defaultCode(): string
+    {
+        try {
+            $defaultCode = $this->query()
+                ->where($this->activeColumn, true)
+                ->where($this->defaultColumn, true)
+                ->value($this->codeColumn);
+
+            if (is_string($defaultCode) && $defaultCode !== '') {
+                return $defaultCode;
+            }
+        } catch (Throwable $exception) {
+            IntegrationExceptions::report($exception);
+
+            return $this->fallback->defaultCode();
+        }
+
+        return $this->fallback->defaultCode();
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public function options(): array
+    {
+        try {
+            $options = $this->query()
+                ->where($this->activeColumn, true)
+                ->orderBy($this->positionColumn, 'desc')
+                ->pluck($this->nameColumn, $this->codeColumn)
+                ->mapWithKeys(fn (mixed $name, mixed $code): array => is_string($code) && $code !== ''
+                    ? [$code => is_string($name) ? $name : $code]
+                    : [])
+                ->all();
+
+            if ($options !== []) {
+                return $options;
+            }
+        } catch (Throwable $exception) {
+            IntegrationExceptions::report($exception);
+
+            return $this->fallback->options();
+        }
+
+        return $this->fallback->options();
+    }
+
+    /**
+     * @return list<string>
+     */
+    public function activeCodes(): array
+    {
+        try {
+            $currencyCodes = $this->query()
+                ->where($this->activeColumn, true)
+                ->pluck($this->codeColumn)
+                ->filter(fn (mixed $code): bool => is_string($code) && $code !== '')
+                ->values()
+                ->all();
+
+            return $currencyCodes !== [] ? array_values($currencyCodes) : $this->fallback->activeCodes();
+        } catch (Throwable $exception) {
+            IntegrationExceptions::report($exception);
+
+            return $this->fallback->activeCodes();
+        }
+    }
+
+    /**
+     * Outside a tenant, this resolves the platform's tenantless currencies.
+     *
+     * @return Builder<Model>
+     */
+    private function query(): Builder
+    {
+        return TenantAwareness::constrainToCurrentTenant((new $this->currencyModel)->newQuery());
+    }
+}
